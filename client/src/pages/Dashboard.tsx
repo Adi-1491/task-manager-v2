@@ -3,12 +3,14 @@ import React from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Pencil, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard: React.FC = () => {
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("pending");
   const [tasks, setTasks] = useState([]);
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,14 +110,28 @@ const Dashboard: React.FC = () => {
       toast.error("Failed to update task status");
     }
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    toast.success("Logged out successfully.");
+    navigate("/login");
+  }
   
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-gray-100 p-6 relative">
+      {/* Logout Button - Top Right */}
+      <button
+        onClick={handleLogout}
+        className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+      >
+        Logout
+      </button>
+  
       <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">
         🗂️ Your Task Dashboard
       </h1>
-
+  
       {/* Form Section */}
       <form onSubmit={handleSubmit} className="flex gap-4 justify-center mb-6">
         <input
@@ -158,7 +174,7 @@ const Dashboard: React.FC = () => {
           </button>
         )}
       </form>
-
+  
       {/* Task List Section */}
       <div className="max-w-2xl mx-auto bg-gray-50 shadow-md rounded-lg p-4">
         <h2 className="text-xl font-semibold mb-4">Your Tasks:</h2>
@@ -167,46 +183,50 @@ const Dashboard: React.FC = () => {
             <p className="text-gray-500">No tasks yet. Add some!</p>
           ) : (
             tasks.map((task: any) => (
-            <li
-              key={task._id}
-              className="p-4 bg-white rounded-lg shadow-sm flex justify-between items-center border"
-            >
-              <div className="flex items-center gap-4">
-                <input
-                  type="checkbox"
-                  checked={task.status === "completed"}
-                  onChange={() => toggleTaskStatus(task)}
-                  className="w-5 h-5 accent-green-600"
-                />
-                <div>
-                  <p className={`text-lg font-semibold ${task.status === "completed" ? "line-through text-gray-400" : ""}`}>
-                    {task.title}
-                  </p>
-                  <p
-                    className={`text-sm ${
-                      task.status === "completed" ? "text-green-600" : "text-yellow-600"
-                    }`}
-                  >
-                    {task.status === "completed" ? "✅ Completed" : "⏳ Pending"}
-                  </p>
+              <li
+                key={task._id}
+                className="p-4 bg-white rounded-lg shadow-sm flex justify-between items-center border"
+              >
+                <div className="flex items-center gap-4">
+                  <input
+                    type="checkbox"
+                    checked={task.status === "completed"}
+                    onChange={() => toggleTaskStatus(task)}
+                    className="w-5 h-5 accent-green-600"
+                  />
+                  <div>
+                    <p
+                      className={`text-lg font-semibold ${
+                        task.status === "completed" ? "line-through text-gray-400" : ""
+                      }`}
+                    >
+                      {task.title}
+                    </p>
+                    <p
+                      className={`text-sm ${
+                        task.status === "completed" ? "text-green-600" : "text-yellow-600"
+                      }`}
+                    >
+                      {task.status === "completed" ? "✅ Completed" : "⏳ Pending"}
+                    </p>
+                  </div>
                 </div>
-              </div>
-
-              <div className="flex gap-2">
-                <button onClick={() => handleEdit(task)} className="hover:text-yellow-500">
-                  <Pencil />
-                </button>
-                <button onClick={() => deleteTasks(task._id)} className="hover:text-red-600">
-                  <Trash2 />
-                </button>
-              </div>
-            </li>
+  
+                <div className="flex gap-2">
+                  <button onClick={() => handleEdit(task)} className="hover:text-yellow-500">
+                    <Pencil />
+                  </button>
+                  <button onClick={() => deleteTasks(task._id)} className="hover:text-red-600">
+                    <Trash2 />
+                  </button>
+                </div>
+              </li>
             ))
           )}
         </ul>
       </div>
     </div>
-  );
+  );  
 };
 
 export default Dashboard;
