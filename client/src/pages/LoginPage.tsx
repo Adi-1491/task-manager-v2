@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-//import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+
+const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const handleSubmit = async (e: React.FormEvent)=>{
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try{
@@ -49,7 +49,7 @@ const Login = () => {
   };
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gray-100'>
+    <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-300'>
       <div className='bg-white p-8 rounded-lg shadow-md w-full max-w-md'>
         <h2 className='text-2xl font-bold mb-6 text-center'>Login</h2>
         <form onSubmit={handleSubmit}>
@@ -78,6 +78,13 @@ const Login = () => {
           <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors">
             Log In
           </button>
+
+          <p className="mt-2 text-sm">
+            Don't have an account?{" "}
+            <a href="/register" className="text-blue-600 underline">
+              Register
+            </a>
+          </p>
 
         </form>
       </div>
