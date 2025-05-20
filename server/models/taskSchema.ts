@@ -8,7 +8,7 @@ const taskSchema =  new mongoose.Schema({
     status:{
         type:String,
         require:true,
-        enum:['Pending','Completed','pending','completed'] //enum accepts limited number of values(possible values of the field)
+        enum:['Pending','Completed','pending','completed','in progress', 'In Progress'] //enum accepts limited number of values(possible values of the field)
     },
     user:{
         type:String,
